@@ -43,3 +43,19 @@ def building_by_number(number):
 @lru_cache()
 def location_by_length(length):
     return [l for l in locations() if len(l.name) == int(length)]
+
+
+@lru_cache()
+def locations_containing_symbols(symbols):
+    # Transform symbol list to dict, counting the occurences of all symbols
+    s_dict = dict();
+    for s in symbols.lower():
+        if s in s_dict:
+            s_dict[s] += 1
+        else:
+            s_dict[s] = 1
+
+    ls = locations()
+    for symbol in s_dict:
+        ls = [l for l in ls if l.name.lower().count(symbol) >= s_dict[symbol]]
+    return ls

@@ -25,3 +25,12 @@ class Puzzles(TelegramModule):
         results = util.location_by_length(length)
         self.respond('Er zijn %i resultaten met lengte %s' % (len(results), length))
         self.respond(', '.join([x.name for x in results]))
+
+    @command
+    def locations_with(self, symbols):
+        """
+        Geeft een lijst met alle locaties waarvan de naam alle gegeven symbolen bevat
+        """
+        results = util.locations_containing_symbols(symbols)
+        self.respond('Er zijn %i resultaten die de symbolen \'%s\' bevatten' % (len(results), symbols))
+        self.respond(', '.join([x.name for x in results]))
