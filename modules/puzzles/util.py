@@ -53,7 +53,7 @@ def locations_containing_symbols(symbols):
 
     ls = locations()
     for symbol in s_dict:
-        ls = [l for l in ls if l.name.lower().count(symbol) >= s_dict[symbol]]
+        ls = [l for l in ls if l.name.lower().replace('ë','e').replace('é','e').count(symbol) >= s_dict[symbol]]
 
     return remove_duplicate_locations(ls)
 
