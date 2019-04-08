@@ -58,7 +58,6 @@ def locations_containing_symbols(symbols):
     return remove_duplicate_locations(ls)
 
 
-@lru_cache()
 def remove_duplicate_locations(locations):
     results = []
     storedLocations = []
