@@ -54,4 +54,18 @@ def locations_containing_symbols(symbols):
     ls = locations()
     for symbol in s_dict:
         ls = [l for l in ls if l.name.lower().count(symbol) >= s_dict[symbol]]
-    return ls
+
+    return remove_duplicate_locations(ls)
+
+
+@lru_cache()
+def remove_duplicate_locations(locations):
+    results = []
+    storedLocations = []
+    for l in locations:
+        # Normalize name by removing spaces and putting it in lowercase
+        normalizedL = l.name.replace(' ', '').lower()
+        if normalizedL not in storedLocations:
+            results.append(l)
+            storedLocations.append(normalizedL)
+    return results
