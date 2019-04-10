@@ -41,7 +41,7 @@ class Puzzles(TelegramModule):
         Geeft een lijst met alle gebouwen die een specifieke lengte hebben
         """
         results = util.buildings_by_length(length)
-        self.respond('Er zijn %i resultaten met lengte %s' % (len(results), length))
+        self.respond('Er zijn %i gebouwen met lengte %s' % (len(results), length))
         self.respond(', '.join([x.name for x in results]))
 
     @command
