@@ -42,7 +42,7 @@ class Puzzles(TelegramModule):
         """
         results = util.buildings_by_length(length)
         self.respond('Er zijn %i gebouwen met lengte %s' % (len(results), length))
-        self.respond(', '.join([x.name for x in results]))
+        self.respond(', '.join([str(x) for x in results]))
 
     @command
     def buildings_with(self, symbols):
@@ -51,4 +51,4 @@ class Puzzles(TelegramModule):
         """
         results = util.buildings_containing_symbols(symbols)
         self.respond('Er zijn %i gebouwen die de symbolen \'%s\' bevatten' % (len(results), symbols))
-        self.respond(', '.join([x.name for x in results]))
+        self.respond(', '.join([str(x) for x in results]))
