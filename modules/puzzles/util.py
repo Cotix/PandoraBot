@@ -42,20 +42,29 @@ def building_by_number(number):
 
 
 @lru_cache()
-def location_by_length(length):
-    return [l for l in locations() if len(l.name) == int(length)]
+def location_by_length(length, ls=locations()):
+    return [l for l in ls if len(l.name) == int(length)]
 
 
 @lru_cache()
-def locations_containing_symbols(symbols):
+def locations_containing_symbols(symbols, ls=locations()):
     # Transform symbol list to dict, counting the occurences of all symbols
     s_dict = Counter(symbols.lower())
 
-    ls = locations()
     for symbol in s_dict:
         ls = [l for l in ls if l.name.lower().replace('ë','e').replace('é','e').count(symbol) >= s_dict[symbol]]
 
     return remove_duplicate_locations(ls)
+
+
+@lru_cache()
+def buildings_by_length(length):
+    return location_by_length(length, ls=tuple(buildings()))
+
+
+@lru_cache()
+def buildings_containing_symbols(symbols):
+    return locations_containing_symbols(symbols, ls=tuple(buildings()))
 
 
 def remove_duplicate_locations(locations):

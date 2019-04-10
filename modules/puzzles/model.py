@@ -19,6 +19,9 @@ class Item:
     def __len__(self):
         return len(self.name)
 
+    def __hash__(self):
+        return hash(self.name)
+
 
 class Building(Item):
 
@@ -38,6 +41,9 @@ class Building(Item):
 
     def __repr__(self):
         return f"<Building: {self.number} - {self.name} ({self.abbreviation})>"
+
+    def __hash__(self):
+        return hash(self.name)
 
 
 class ArtWork(Item):
