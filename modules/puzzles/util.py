@@ -1,5 +1,6 @@
 from functools import lru_cache
 from collections import Counter
+from itertools import chain, permutations
 
 from modules.puzzles.model import Building, ArtWork
 
@@ -77,3 +78,32 @@ def remove_duplicate_locations(locations):
             results.append(l)
             storedLocations.append(normalizedL)
     return results
+
+
+@lru_cache()
+def brute_force_coordinates(digits):
+    # Perform a coarse filter on the digits to check if they can possibly form valid coordinates
+    if (not(digits.count('5') >= 1 and digits.count('2') >= 2 and digits.count('6') >= 1 and digits.count('8') >= 1)):
+        return []
+
+    # Remove predetermined digits
+    digits = digits.replace('5', '', 1).replace('2', '', 2).replace('6', '', 1).replace('8', '', 1)
+    digits_perms = [''.join(x) for x in list(map(list, permutations(digits, 6)))]
+    # Coordinate strings have the form '52.2xxx,6.8yyy'
+    coor_strings = []
+    for digits_perm in digits_perms:
+        lat_digits = digits_perm[:3]
+        long_digits = digits_perm[3:]
+        coor_strings.append('52.2' + lat_digits + ',6.8' + long_digits)
+
+    return [x for x in coor_strings if is_on_campus(x)]
+
+
+@lru_cache()
+# Campus area is approximated by a square
+# coordinate_string has the form '52.2xxx,6.8yyy'
+def is_on_campus(coordinate_string):
+    coordinates = coordinate_string.split(',')
+    latitude = coordinates[0]
+    longitude = coordinates[1]
+    return 52.2336 < float(latitude) < 52.2524 and 6.84246 < float(longitude) < 6.86630

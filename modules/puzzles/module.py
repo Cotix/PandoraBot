@@ -33,7 +33,8 @@ class Puzzles(TelegramModule):
         """
         results = util.locations_containing_symbols(symbols)
         self.respond('Er zijn %i resultaten die de symbolen \'%s\' bevatten' % (len(results), symbols))
-        self.respond(', '.join([x.name for x in results]))
+        if(results):
+            self.respond(', '.join([x.name for x in results]))
 
     @command
     def buildings(self, length):
@@ -52,3 +53,13 @@ class Puzzles(TelegramModule):
         results = util.buildings_containing_symbols(symbols)
         self.respond('Er zijn %i gebouwen die de symbolen \'%s\' bevatten' % (len(results), symbols))
         self.respond(', '.join([str(x) for x in results]))
+
+    @command
+    def coordinates(self, digits):
+        """
+        Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven cijfers
+        """
+        results = util.brute_force_coordinates(digits)
+        self.respond('Er zijn %i locaties op de campus met deze cijfers.' % (len(results)))
+        if(results):
+            self.respond(', '.join([x for x in results]))
