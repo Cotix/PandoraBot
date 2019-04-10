@@ -80,30 +80,29 @@ def remove_duplicate_locations(locations):
     return results
 
 
-@lru_cache()
-def brute_force_coordinates(digits):
-    # Perform a coarse filter on the digits to check if they can possibly form valid coordinates
-    if (not(digits.count('5') >= 1 and digits.count('2') >= 2 and digits.count('6') >= 1 and digits.count('8') >= 1)):
-        return []
+def brute_force_coordinates(digits_list):
+    # Add token to seperate latitude and longitude later
+    digits_list.append(',')
+    perms = [''.join(x) for x in list(map(list, permutations(digits_list, len(digits_list))))]
 
-    # Remove predetermined digits
-    digits = digits.replace('5', '', 1).replace('2', '', 2).replace('6', '', 1).replace('8', '', 1)
-    digits_perms = [''.join(x) for x in list(map(list, permutations(digits, 6)))]
-    # Coordinate strings have the form '52.2xxx,6.8yyy'
-    coor_strings = []
-    for digits_perm in digits_perms:
-        lat_digits = digits_perm[:3]
-        long_digits = digits_perm[3:]
-        coor_strings.append('52.2' + lat_digits + ',6.8' + long_digits)
+    coordinates_list = []
+    for perm in perms:
+        lat, long = perm.split(',')
+        # Coarse filter
+        if lat.startswith('522') and long.startswith('68') and len(lat) >= 6 and len(long) >= 5:
+            # Add decimal point, cut off excess significance and convert to float
+            lat = float(lat[:2] + '.' + lat[2:6])
+            long = float(long[:1] + '.' + long[1:5])
 
-    return [x for x in coor_strings if is_on_campus(x)]
+            if is_on_campus(lat, long):
+                similar_coordinates = [x for x in coordinates_list if abs(x[0]-lat) < 0.0003 and abs(x[1]-long) < 0.0003]
+                if not similar_coordinates:
+                    coordinates_list.append((lat, long))
+
+    return coordinates_list
 
 
 @lru_cache()
 # Campus area is approximated by a square
-# coordinate_string has the form '52.2xxx,6.8yyy'
-def is_on_campus(coordinate_string):
-    coordinates = coordinate_string.split(',')
-    latitude = coordinates[0]
-    longitude = coordinates[1]
-    return 52.2336 < float(latitude) < 52.2524 and 6.84246 < float(longitude) < 6.86630
+def is_on_campus(latitude, longitude):
+    return 52.2336 < latitude < 52.2524 and 6.84246 < longitude < 6.86630

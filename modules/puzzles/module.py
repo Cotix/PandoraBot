@@ -55,11 +55,11 @@ class Puzzles(TelegramModule):
         self.respond(', '.join([str(x) for x in results]))
 
     @command
-    def coordinates(self, digits):
+    def coordinates(self, numbers):
         """
-        Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven cijfers
+        Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven getallen. Getallen dienen te worden gescheiden met komma's
         """
-        results = util.brute_force_coordinates(digits)
-        self.respond('Er zijn %i locaties op de campus met deze cijfers.' % (len(results)))
+        results = util.brute_force_coordinates(numbers.split(','))
+        self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
         if(results):
-            self.respond(', '.join([x for x in results]))
+            self.respond('\n'.join([('' + str(x[0]) + ', ' + str(x[1])) for x in results]))
