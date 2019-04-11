@@ -62,4 +62,4 @@ class Puzzles(TelegramModule):
         results = util.brute_force_coordinates(numbers.split(','))
         self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
         if(results):
-            self.respond('\n'.join([('' + str(x[0]) + ', ' + str(x[1])) for x in results]))
+            self.respond('\n'.join(['%s, %s' % x for x in results]))

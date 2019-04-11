@@ -87,17 +87,17 @@ def brute_force_coordinates(digits_list):
 
     coordinates_list = []
     for perm in perms:
-        lat, long = perm.split(',')
+        lat, lon = perm.split(',')
         # Coarse filter
-        if lat.startswith('522') and long.startswith('68') and len(lat) >= 6 and len(long) >= 5:
+        if lat.startswith('522') and lon.startswith('68') and len(lat) >= 6 and len(lon) >= 5:
             # Add decimal point, cut off excess significance and convert to float
             lat = float(lat[:2] + '.' + lat[2:6])
-            long = float(long[:1] + '.' + long[1:5])
+            lon = float(lon[:1] + '.' + lon[1:5])
 
-            if is_on_campus(lat, long):
-                similar_coordinates = [x for x in coordinates_list if abs(x[0]-lat) < 0.0003 and abs(x[1]-long) < 0.0003]
+            if is_on_campus(lat, lon):
+                similar_coordinates = [x for x in coordinates_list if abs(x[0]-lat) < 0.0003 and abs(x[1]-lon) < 0.0003]
                 if not similar_coordinates:
-                    coordinates_list.append((lat, long))
+                    coordinates_list.append((lat, lon))
 
     return coordinates_list
 
