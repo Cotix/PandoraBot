@@ -36,7 +36,6 @@ class Puzzles(TelegramModule):
         if(results):
             self.respond(', '.join([x.name for x in results]))
 
-
     @command
     def buildings(self, length):
         """
@@ -60,14 +59,25 @@ class Puzzles(TelegramModule):
         """
         Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven getallen. Getallen dienen te worden gescheiden met komma's
         """
-        results = util.brute_force_coordinates(numbers.split(','))
-        self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
-        if(results):
-            if len(results) <= 5:
-                for result in results:
-                    self.send_location(result[0], result[1])
-            elif len(results) <= 15:
+        number_list = numbers.split(',')
+        amount_of_numbers = len([x for x in number_list if x.isdigit()])
+        if amount_of_numbers is len(number_list):
+            results = util.brute_force_coordinates(number_list)
+            self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
+            if(results):
                 self.respond('\n'.join(['%s, %s' % x for x in results]))
+        else:
+            self.respond('Verkeerde input. Ik verwacht bijvoorbeeld \'/coordinates 52,248,219,6,85,40,38\'.')
 
-    def send_location(self, lat, lon):
-        self.bot.sendLocation(self.update.message.chat_id, latitude=lat, longitude=lon)
+    @command
+    def ascii(self, numbers):
+        """
+        Vertaald de waarden naar ASCII-tekens. ASCII-waarden van letters liggen tussen de 65 en de 121. De inputwaarden dienen gescheiden te worden met komma's.
+        """
+        number_list = numbers.split(',')
+        amount_of_numbers = len([x for x in number_list if x.isdigit()])
+        if amount_of_numbers is len(number_list):
+            result = util.numbers_to_ascii_characters(number_list)
+            self.respond(numbers + ': ' + result)
+        else:
+            self.respond('Verkeerde input. Ik verwacht bijvoorbeeld \'/ascii 84,101,115,116\'.')
