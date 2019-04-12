@@ -156,7 +156,8 @@ class TelegramModule(metaclass=TelegramModuleMeta):
                               text=msg)
         logging.log(logging.INFO, 'Sending message: %s' % msg)
 
-    def ask_option(self, options, question='Wat bedoel je?', n_cols=3, default=None, values=None):
+    def ask_option(self, options, question='Wat bedoel je?', n_cols=3, default=None,
+                   values=None, timeout=settings.KEYBOARD_TIMEOUT):
         if not values:
             values = options
         callback_id = get_keyboard_counter()
@@ -173,7 +174,7 @@ class TelegramModule(metaclass=TelegramModuleMeta):
                                     reply_markup=reply_markup)
 
         start_time = time.time()
-        while time.time() - start_time < settings.KEYBOARD_TIMEOUT:
+        while time.time() - start_time < timeout:
             if result['done']:
                 break
             time.sleep(settings.KEYBOARD_SLEEP)
