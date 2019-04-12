@@ -33,7 +33,9 @@ class Puzzles(TelegramModule):
         """
         results = util.locations_containing_symbols(symbols)
         self.respond('Er zijn %i resultaten die de symbolen \'%s\' bevatten' % (len(results), symbols))
-        self.respond(', '.join([x.name for x in results]))
+        if(results):
+            self.respond(', '.join([x.name for x in results]))
+
 
     @command
     def buildings(self, length):
@@ -52,3 +54,14 @@ class Puzzles(TelegramModule):
         results = util.buildings_containing_symbols(symbols)
         self.respond('Er zijn %i gebouwen die de symbolen \'%s\' bevatten' % (len(results), symbols))
         self.respond(', '.join([str(x) for x in results]))
+
+    @command
+    def coordinates(self, numbers):
+        """
+        Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven getallen. Getallen dienen te worden gescheiden met komma's
+        """
+        results = util.brute_force_coordinates(numbers.split(','))
+        self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
+        if(results):
+            self.respond('\n'.join(['%s, %s' % x for x in results]))
+

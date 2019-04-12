@@ -1,5 +1,7 @@
 from functools import lru_cache
 from collections import Counter
+from itertools import chain, permutations
+
 
 from modules.puzzles.model import Building, ArtWork
 
@@ -50,6 +52,7 @@ def location_by_length(length, ls=locations()):
 def locations_containing_symbols(symbols, ls=locations()):
     # Transform symbol list to dict, counting the occurences of all symbols
     s_dict = Counter(symbols.lower())
+
     results = set()
     for location in ls:
         # Make a list of counters of all variants
@@ -74,3 +77,45 @@ def buildings_by_length(length):
 @lru_cache()
 def buildings_containing_symbols(symbols):
     return locations_containing_symbols(symbols, ls=tuple(buildings()))
+
+
+def remove_duplicate_locations(locations):
+    results = []
+    storedLocations = []
+    for l in locations:
+        # Normalize name by removing spaces and putting it in lowercase
+        normalizedL = l.name.replace(' ', '').lower()
+        if normalizedL not in storedLocations:
+            results.append(l)
+            storedLocations.append(normalizedL)
+    return results
+
+
+def brute_force_coordinates(digits_list):
+    # Add token to seperate latitude and longitude later
+    digits_list.append(',')
+    perms = permutations(digits_list, len(digits_list))
+
+    coordinates_list = []
+    for perm in perms:
+        perm_string = ''.join([x for x in perm])
+
+        lat, lon = perm_string.split(',')
+        # Coarse filter
+        if lat.startswith('522') and lon.startswith('68') and len(lat) >= 6 and len(lon) >= 5:
+            # Add decimal point, cut off excess significance and convert to float
+            lat = float(lat[:2] + '.' + lat[2:6])
+            lon = float(lon[:1] + '.' + lon[1:5])
+
+            if is_on_campus(lat, lon):
+                similar_coordinates = [x for x in coordinates_list if abs(x[0]-lat) < 0.0003 and abs(x[1]-lon) < 0.0003]
+                if not similar_coordinates:
+                    coordinates_list.append((lat, lon))
+
+    return coordinates_list
+
+
+@lru_cache()
+# Campus area is approximated by a square
+def is_on_campus(latitude, longitude):
+    return 52.2336 < latitude < 52.2524 and 6.84246 < longitude < 6.86630
