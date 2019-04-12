@@ -83,9 +83,6 @@ def remove_duplicate_locations(locations):
 def brute_force_coordinates(digits_list):
     # Add token to seperate latitude and longitude later
     digits_list.append(',')
-
-
-    perms = [''.join(x) for x in list(map(list, permutations(digits_list, len(digits_list))))]
     perms = permutations(digits_list, len(digits_list))
 
     coordinates_list = []
