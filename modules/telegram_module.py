@@ -1,9 +1,46 @@
 import inspect
 import logging
-import threading
+import time
 
-from telegram.ext import CommandHandler, MessageHandler, Filters, run_async
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CommandHandler, MessageHandler, Filters, run_async, \
+    CallbackQueryHandler
+
+from config import settings
 from config.telegram import dispatcher
+
+
+def button_handler(bot, update):
+    global GLOBAL_KEYBOARD_MAP
+    data = update.callback_query.data
+    key, value = data.split()
+    bot.editMessageReplyMarkup(message_id=update.callback_query.message.message_id,
+                               chat_id=update.callback_query.message.chat.id,
+                               reply_markup=None)
+    if key not in GLOBAL_KEYBOARD_MAP:
+        logging.error('Key not found in the global keyboard map!')
+        return
+    GLOBAL_KEYBOARD_MAP[key]['value'] = value
+    GLOBAL_KEYBOARD_MAP[key]['done'] = True
+
+
+def init():
+    global GLOBAL_KEYBOARD_COUNTER
+    global GLOBAL_KEYBOARD_MAP
+    GLOBAL_KEYBOARD_COUNTER = 0
+    GLOBAL_KEYBOARD_MAP = dict()
+    dispatcher.add_handler(CallbackQueryHandler(button_handler))
+
+
+def get_keyboard_counter():
+    global GLOBAL_KEYBOARD_COUNTER
+    GLOBAL_KEYBOARD_COUNTER += 1
+    return str(GLOBAL_KEYBOARD_COUNTER)
+
+
+def set_keyboard_map(k, v):
+    global GLOBAL_KEYBOARD_MAP
+    GLOBAL_KEYBOARD_MAP[k] = v
 
 
 def command(func):
@@ -118,4 +155,35 @@ class TelegramModule(metaclass=TelegramModuleMeta):
         self.bot.send_message(chat_id=self.update.message.chat_id,
                               text=msg)
         logging.log(logging.INFO, 'Sending message: %s' % msg)
+
+    def ask_option(self, options, question='Wat bedoel je?', n_cols=3, default=None, values=None):
+        if not values:
+            values = options
+        callback_id = get_keyboard_counter()
+        result = dict(done=False)
+        set_keyboard_map(callback_id, result)
+        button_list = [
+            InlineKeyboardButton(option, callback_data=f'{callback_id} {values[i]}')
+            for i, option in enumerate(options)
+        ]
+        reply_markup = InlineKeyboardMarkup(
+            [button_list[i:i + n_cols] for i in range(0, len(button_list), n_cols)]
+        )
+        msg = self.bot.send_message(self.update.message.chat_id, question,
+                                    reply_markup=reply_markup)
+
+        start_time = time.time()
+        while time.time() - start_time < settings.KEYBOARD_TIMEOUT:
+            if result['done']:
+                break
+            time.sleep(settings.KEYBOARD_SLEEP)
+        else:
+            # We timed out!
+            self.bot.editMessageReplyMarkup(
+                message_id=msg.message_id,
+                chat_id=msg.chat.id,
+                reply_markup=None)
+            return default
+        return result['value']
+
 
