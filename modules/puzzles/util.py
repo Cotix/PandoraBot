@@ -119,3 +119,7 @@ def brute_force_coordinates(digits_list):
 # Campus area is approximated by a square
 def is_on_campus(latitude, longitude):
     return 52.2336 < latitude < 52.2524 and 6.84246 < longitude < 6.86630
+
+
+def numbers_to_ascii_characters(numbers):
+    return ''.join([chr(int(x)) for x in numbers])
