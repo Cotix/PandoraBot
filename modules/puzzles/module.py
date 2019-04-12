@@ -63,5 +63,11 @@ class Puzzles(TelegramModule):
         results = util.brute_force_coordinates(numbers.split(','))
         self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
         if(results):
-            self.respond('\n'.join(['%s, %s' % x for x in results]))
+            if len(results) <= 5:
+                for result in results:
+                    self.send_location(result[0], result[1])
+            elif len(results) <= 15:
+                self.respond('\n'.join(['%s, %s' % x for x in results]))
 
+    def send_location(self, lat, lon):
+        self.bot.sendLocation(self.update.message.chat_id, latitude=lat, longitude=lon)
