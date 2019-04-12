@@ -36,6 +36,7 @@ class Puzzles(TelegramModule):
         if(results):
             self.respond(', '.join([x.name for x in results]))
 
+
     @command
     def buildings(self, length):
         """
@@ -63,3 +64,4 @@ class Puzzles(TelegramModule):
         self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
         if(results):
             self.respond('\n'.join(['%s, %s' % x for x in results]))
+

@@ -2,6 +2,7 @@ from functools import lru_cache
 from collections import Counter
 from itertools import chain, permutations
 
+
 from modules.puzzles.model import Building, ArtWork
 
 BUILDING_FILE = 'data/buildings.txt'
@@ -52,10 +53,20 @@ def locations_containing_symbols(symbols, ls=locations()):
     # Transform symbol list to dict, counting the occurences of all symbols
     s_dict = Counter(symbols.lower())
 
-    for symbol in s_dict:
-        ls = [l for l in ls if l.name.lower().replace('ë','e').replace('é','e').count(symbol) >= s_dict[symbol]]
-
-    return remove_duplicate_locations(ls)
+    results = set()
+    for location in ls:
+        # Make a list of counters of all variants
+        variant_counters = [Counter(variant.lower()) for variant in location.variants]
+        # Subtract these counters from s_dict, and map to the highest remainder
+        variant_counters = [
+            max([v - counter.get(k, 0) for k, v in s_dict.items()])
+            for counter in variant_counters
+        ]
+        # If all values are below or equal to 0
+        # this location matches on atleast one variant
+        if min(variant_counters) <= 0:
+            results.add(location)
+    return results
 
 
 @lru_cache()

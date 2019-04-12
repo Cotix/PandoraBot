@@ -27,7 +27,9 @@ class TelegramModuleMeta(type):
             method = getattr(x, name)
             if hasattr(method, "is_command"):
                 def get_wrapper(func):
-                    argspec = inspect.getfullargspec(method).args
+                    complete_arg_spec = inspect.getfullargspec(method)
+                    argspec = complete_arg_spec.args
+                    has_vararg = inspect.getfullargspec(method).varargs
 
                     if (argspec[0] != 'self'):
                         raise ValueError('First argument of TelegramCommand should be '
@@ -35,8 +37,13 @@ class TelegramModuleMeta(type):
                     argspec = argspec[1:]
 
                     def wrapper(bot, update, user_data=None, args=[]):
+                        amount_of_method_arguments = len(argspec)
+                        amount_of_given_arguments = len(args)
+                        not_enough_given_arguments = amount_of_given_arguments < amount_of_method_arguments
+                        too_many_given_arguments = amount_of_given_arguments > amount_of_method_arguments
+
                         ins = x(context=user_data, update=update, bot=bot)
-                        if len(argspec) != len(args):
+                        if (not_enough_given_arguments) or (too_many_given_arguments and not has_vararg):
                             logging.debug('Command called with invalid argument count')
                             bot.send_message(chat_id=update.message.chat_id,
                                              text='Ongeldig aantal argumenten.')
@@ -68,12 +75,34 @@ class TelegramModuleMeta(type):
 
     @staticmethod
     def get_help_text(func):
-        argspec = inspect.getfullargspec(func).args[1:]
-        funcspec = '/%s %s\n' % (func.__name__,
-                                 ' '.join(['<%s>' % arg for arg in argspec]))
-        helptext = func.__doc__.replace('\n', ' ').replace('\t', ' ')
-        helptext = ' '.join([x for x in helptext.split() if x != ''])
-        return funcspec + helptext
+        fullargspec = inspect.getfullargspec(func)
+        argspec = fullargspec.args[1:]
+        varargs = fullargspec.varargs
+
+        funcspec = TelegramModuleMeta._build_funcspec(func, argspec)
+        varspec = TelegramModuleMeta._build_varspec(varargs)
+        helptext = TelegramModuleMeta._build_helptext(func.__doc__ or '')
+
+        return "{func} {varargs}\n{help}".format(func=funcspec,
+                                                 varargs=varspec,
+                                                 help=helptext)
+
+    @staticmethod
+    def _build_funcspec(func, argspec):
+        params = ' '.join(['<{arg}>'.format(arg=arg) for arg in argspec])
+        return '/{method} {params}'.format(method=func.__name__, params=params)
+
+    @staticmethod
+    def _build_varspec(varargs):
+        varargstring = ''
+        if varargs:
+            varargstring = '<*{vararg}>'.format(vararg=varargs)
+        return varargstring
+
+    @staticmethod
+    def _build_helptext(doc):
+        doc = doc.replace('\n', ' ').replace('\t', ' ')
+        return ' '.join([x for x in doc.split() if x != ''])
 
 
 class TelegramModule(metaclass=TelegramModuleMeta):
