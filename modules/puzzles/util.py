@@ -50,11 +50,20 @@ def location_by_length(length, ls=locations()):
 def locations_containing_symbols(symbols, ls=locations()):
     # Transform symbol list to dict, counting the occurences of all symbols
     s_dict = Counter(symbols.lower())
-
-    for symbol in s_dict:
-        ls = [l for l in ls if l.name.lower().count(symbol) >= s_dict[symbol]]
-
-    return remove_duplicate_locations(ls)
+    results = set()
+    for location in ls:
+        # Make a list of counters of all variants
+        variant_counters = [Counter(variant.lower()) for variant in location.variants]
+        # Subtract these counters from s_dict, and map to the highest remainder
+        variant_counters = [
+            max([v - counter.get(k, 0) for k, v in s_dict.items()])
+            for counter in variant_counters
+        ]
+        # If all values are below or equal to 0
+        # this location matches on atleast one variant
+        if min(variant_counters) <= 0:
+            results.add(location)
+    return results
 
 
 @lru_cache()
@@ -65,15 +74,3 @@ def buildings_by_length(length):
 @lru_cache()
 def buildings_containing_symbols(symbols):
     return locations_containing_symbols(symbols, ls=tuple(buildings()))
-
-
-def remove_duplicate_locations(locations):
-    results = []
-    storedLocations = []
-    for l in locations:
-        # Normalize name by removing spaces and putting it in lowercase
-        normalizedL = l.name.replace(' ', '').lower()
-        if normalizedL not in storedLocations:
-            results.append(l)
-            storedLocations.append(normalizedL)
-    return results

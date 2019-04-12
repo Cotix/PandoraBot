@@ -2,7 +2,6 @@ Dutch Name	Literal Translation
 Bubus	Bubus
 De Blijvende Verwondering	The Lasting Marvel
 Het Ding	the Thing
-HetDing	theThing
 Drenkeling	Drowning Man
 De Drie Watervlaggen	the Three Water Flags
 Het Kader van Drienerlo	The Frame of Drienerlo
@@ -12,13 +11,10 @@ Kolommen	Columns
 Information Plaza (Lichtkrant)	Information Plaza (News Ticker)
 Sardineblik	Sardine Can
 Het Signaal	The Signal
-HetSignaal	TheSignal
 Spiegel Spiegel	Mirror Mirror
 Tango Dansers	Tango Dancers
-TangoDansers	TangoDancers
 Het Torentje van Drienerlo	Pinnacle of Drienerlo
 De Trom	the Drum
-DeTrom	theDrum
 UT-logo	UT-Logo
 Beeldengroep Tengenenge	Sculpture Group Tengenenge
 Gedenksteen voor het Oude Onderwijs Model	Memorial for the Former Educational Model
@@ -29,7 +25,6 @@ Digital Meeting	Digital Meeting
 Borstbeeld van Rector Magnificus Harry van den Kroonenberg	Bust of Rector Magnificus Harry van den Kroonenberg
 Draaitafel	DJ Booth
 Taaie Tiller	Heavy Lifter
-TaaieTiller	HeavyLifter
 Matenweg	Matenweg
 Reelaan	Reelaan
 Calslaan	Calslaan
@@ -42,7 +37,6 @@ Charlie	Charlie
 Drienerlolaan	Drienerlolaan
 Hallenweg	Hallenweg
 De Zul	De Zul
-DeZul	DeZul
 Dienstweg	Dienstweg
 Horstlindelaan	Horstlindelaan
 Boerderijweg	Boerderijweg
