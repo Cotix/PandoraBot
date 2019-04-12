@@ -18,8 +18,8 @@ class Photo(TelegramModule):
     @photo
     def recv_photo(self):
         """
-        Probeert tekst te herkennen in fotos. Bij lange teksten reageerd de bot met de
-        gevonden tekst. Bij teksten die overeenkomen met kill of puzzle codes word die
+        Probeert tekst te herkennen in foto's. Bij lange teksten reageert de bot met de
+        gevonden tekst. Bij teksten die overeenkomen met kill of puzzle codes wordt die
         ingevuld.
         """
         photo = self.update.message.photo[-1]
