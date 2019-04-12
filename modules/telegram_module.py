@@ -1,7 +1,8 @@
 import inspect
 import logging
+import threading
 
-from telegram.ext import CommandHandler, MessageHandler, Filters
+from telegram.ext import CommandHandler, MessageHandler, Filters, run_async
 from config.telegram import dispatcher
 
 
@@ -52,7 +53,7 @@ class TelegramModuleMeta(type):
                         else:
                             func(ins, *args)
                     wrapper.original = func
-                    return wrapper
+                    return run_async(wrapper)
 
                 setattr(x, name, get_wrapper(method))
 
