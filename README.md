@@ -41,7 +41,7 @@ class ExampleModule(TelegramModule):
  
  
  #### TelegramModule instance variables and functions
- For every request that is made, a new instance of your module will be created. These instances will have a few variables and functions available that helps with developing new modules.
+ For every request that is made, a new instance of your module will be created. These instances will have a few variables and functions available that help with developing new modules.
  
  Instance variables available:
  
@@ -50,7 +50,7 @@ class ExampleModule(TelegramModule):
     The bot argument inherited from the python-telegram-bot library. This can be used to send complex messages like locations or photos.
  - self.update
  
-     Inherited from the python-telegram-bot aswel. This contains all information about the corresponding message that triggered this function. This context things like chat, message or user ids, full body text, timestamp, attachments, etc.
+     Inherited from the python-telegram-bot aswel. This contains all information about the corresponding message that triggered this function. This includes things like chat, message or user ids, full body text, timestamp, attachments, etc.
  - self.context
  
     Dict that is unique to the user that triggered the function. This dict is persistent over multiple requests and can be used to store variables like auth or location data, that might be used in a different function (in a different module).

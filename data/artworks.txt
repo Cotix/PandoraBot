@@ -15,7 +15,7 @@ Spiegel Spiegel	Mirror Mirror
 Tango Dansers	Tango Dancers
 Het Torentje van Drienerlo	Pinnacle of Drienerlo
 De Trom	the Drum
-UT-logo	UT-Logo
+UT-logo	UT Logo
 Beeldengroep Tengenenge	Sculpture Group Tengenenge
 Gedenksteen voor het Oude Onderwijs Model	Memorial for the Former Educational Model
 Sculpturen	Sculptures
@@ -30,7 +30,7 @@ Reelaan	Reelaan
 Calslaan	Calslaan
 Bosweg	Bosweg
 Boulevard	Boulevard
-Langenkampweg 	Langenkampweg
+Langenkampweg	Langenkampweg
 Campuslaan	Campuslaan
 Drienerbeeklaan	Drienerbeeklaan
 Charlie	Charlie

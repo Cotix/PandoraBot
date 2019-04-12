@@ -11,7 +11,7 @@ Nr	Dutch Name	Afkorting	Literal Translation	Explanation
 44	Drienerburght	DR	Stronghold Driener
 40	Erve Holzik	ER	Compound Holzik
 42	Faculty Club	FC	Faculty Club
-17	The Gallery	DY	The Gallery
+17	The Gallery	GY	The Gallery
 5	Garage	GA	Garage
 13	Hal B	HB	Hall B
 9	Citadel	CI	Citadel	Fortified core defense area in a town
@@ -20,7 +20,7 @@ Nr	Dutch Name	Afkorting	Literal Translation	Explanation
 45	Hogekamp	HO	High Camp
 21	Horstring	HR	Ring of Horst
 20	Horsttoren	HTF	Tower of Horst
-75	ICT	ITC	ICT
+75	ITC	ITC	ITC
 30	Keet	KT	Shed
 41	Cubicus	CU	Cubicus
 23	Kleinhorst	KH	Little Horst
@@ -29,12 +29,12 @@ Nr	Dutch Name	Afkorting	Literal Translation	Explanation
 27	Meander	ME	Meander
 59	Mondriaan	MO	Mondriaan
 16	Nanolab	NL	Nano Lab
-24	Noordhoorst	NH	Horst North
+24	Noordhorst	NH	Horst North
 0	O&O plein	OO	O&O square	O&O stands for Education & Research
 26	Oosthorst	OH	Horst East
 56	Openluchttheather	OUT	Outdoor Theatre
 6	Paviljoen	PA	Pavillion
-10	Ravelijn	RA	Ravelin	Triangular fortification on a fortress
+10	Ravelijn	RA	Ravelijn	Triangular fortification on a fortress
 43	Schuur	SR	Barn
 7	Seinhuis	SH	Signal Box	Used for switching train tracks
 51	Sky	SK	Sky
