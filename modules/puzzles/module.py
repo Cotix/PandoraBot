@@ -60,13 +60,21 @@ class Puzzles(TelegramModule):
         Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven getallen. Getallen dienen te worden gescheiden met komma's
         """
         number_list = numbers.split(',')
+
         if all([x.isdigit() for x in number_list]):
             results = util.brute_force_coordinates(number_list)
             self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
             if(results):
-                self.respond('\n'.join(['%s, %s' % x for x in results]))
+                if len(results) <= 5:
+                    for result in results:
+                        self.send_location(result[0], result[1])
+                elif len(results) <= 15:
+                    self.respond('\n'.join(['%s, %s' % x for x in results]))
         else:
             self.respond('Verkeerde input. Ik verwacht bijvoorbeeld \'/coordinates 52,248,219,6,85,40,38\'.')
+
+    def send_location(self, lat, lon):
+        self.bot.sendLocation(self.update.message.chat_id, latitude=lat, longitude=lon)
 
     @command
     def ascii(self, numbers):
