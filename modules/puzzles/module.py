@@ -60,8 +60,7 @@ class Puzzles(TelegramModule):
         Geeft alle mogelijke locaties op de campus met coordinaten bestaande uit de gegeven getallen. Getallen dienen te worden gescheiden met komma's
         """
         number_list = numbers.split(',')
-        amount_of_numbers = len([x for x in number_list if x.isdigit()])
-        if amount_of_numbers is len(number_list):
+        if all([x.isdigit() for x in number_list]):
             results = util.brute_force_coordinates(number_list)
             self.respond('Er zijn %i locaties op de campus met deze getallen.' % (len(results)))
             if(results):
@@ -75,8 +74,7 @@ class Puzzles(TelegramModule):
         Vertaalt de waarden naar ASCII-tekens. ASCII-waarden van letters liggen tussen de 65 en de 121. De inputwaarden dienen gescheiden te worden met komma's.
         """
         number_list = numbers.split(',')
-        amount_of_numbers = len([x for x in number_list if x.isdigit()])
-        if amount_of_numbers is len(number_list):
+        if all([x.isdigit() for x in number_list]):
             result = util.numbers_to_ascii_characters(number_list)
             self.respond(numbers + ': ' + result)
         else:
