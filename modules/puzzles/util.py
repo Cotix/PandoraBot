@@ -119,3 +119,45 @@ def brute_force_coordinates(digits_list):
 # Campus area is approximated by a square
 def is_on_campus(latitude, longitude):
     return 52.2336 < latitude < 52.2524 and 6.84246 < longitude < 6.86630
+
+
+def numbers_to_ascii_characters(numbers):
+    return ''.join([chr(int(x)) for x in numbers])
+
+
+@lru_cache()
+def base_x_to_base_y(x, original_base, new_base):
+    return base_10_to_base_b(base_b_to_base_10(x, original_base), new_base)
+
+
+@lru_cache()
+def base_b_to_base_10(x, b):
+    return int(x, b)
+
+
+@lru_cache()
+def base_10_to_base_b(x, b):
+    if x == 0:
+        return '0'
+    result = ''
+    current_x = x
+    results = []
+    while current_x:
+        mod = current_x % b
+        current_x = current_x // b
+        results.append(chr(48 + mod + 7 * (mod > 9)))
+    return ''.join(results)
+
+
+@lru_cache()
+def is_in_base(x, b):
+    for character in x:
+        if character.isdigit():
+            if int(character) >= b:
+                return False
+        elif character.isalpha():
+            if ord(character.lower()) - ord('a') + 10 >= b:
+                return False
+        else:
+            return False
+    return True
