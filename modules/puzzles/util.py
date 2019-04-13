@@ -141,11 +141,12 @@ def base_10_to_base_b(x, b):
         return '0'
     result = ''
     current_x = x
+    results = []
     while current_x:
         mod = current_x % b
         current_x = current_x // b
-        result = chr(48 + mod + 7 * (mod > 9)) + result
-    return result
+        results.append(chr(48 + mod + 7 * (mod > 9)))
+    return ''.join(results)
 
 
 @lru_cache()
