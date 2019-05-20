@@ -48,6 +48,9 @@ class Photo(TelegramModule):
         contours, _ = cv2.findContours(new_img, cv2.RETR_EXTERNAL,
                                                       cv2.CHAIN_APPROX_SIMPLE)
         # Loop through the contours and OCR sub images
+
+        results = []
+
         for contour in contours:
             # get rectangle bounding contour
             [x, y, w, h] = cv2.boundingRect(contour)
@@ -60,7 +63,13 @@ class Photo(TelegramModule):
                 section_img = Image.fromarray(section)
                 txt = pytesseract.image_to_string(section_img)
                 if txt:
-                    self.respond(txt)
+                    results.append(txt)
             except TesseractError:
                 pass
 
+        if len(results) > 5:
+            option = self.ask_option(['Ja', 'Nee'],
+                            f'Er zijn {len(results)} resultaten, zal ik toch sturen?')
+            if option == 'Ja':
+                for r in results:
+                    self.respond(r)
