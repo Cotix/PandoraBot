@@ -73,3 +73,6 @@ class Photo(TelegramModule):
             if option == 'Ja':
                 for r in results:
                     self.respond(r)
+        else:
+            for r in results:
+                self.respond(r)
