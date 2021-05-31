@@ -25,7 +25,7 @@ class IAPandora(TelegramModule):
 
     @command
     def auth_david(self, password):
-        self.auth("haha trek ad")
+        self.auth("haha trek ad", password)
 
     @command
     def kill(self, code):
