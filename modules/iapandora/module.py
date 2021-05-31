@@ -24,6 +24,10 @@ class IAPandora(TelegramModule):
                          'inloggegevens gegeven?')
 
     @command
+    def auth_david(self, password):
+        self.auth("haha trek ad", password)
+
+    @command
     def kill(self, code):
         """
         Dit command vult een killcode in op jouw naam.
