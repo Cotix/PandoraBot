@@ -152,6 +152,8 @@ class TelegramModule(metaclass=TelegramModuleMeta):
         self.update = update
 
     def respond(self, msg):
+        if not msg or len(msg.strip()) == 0:
+            return
         self.bot.send_message(chat_id=self.update.message.chat_id,
                               text=msg)
         logging.log(logging.INFO, 'Sending message: %s' % msg)

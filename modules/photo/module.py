@@ -82,7 +82,7 @@ class Photo(TelegramModule):
 
         results = [r for r in results if r and len(r) > 1]
         total = ' ' + ' '.join(results) + ' '
-        codes = [x for x in re.findall(r'\s[a-zA-Z0-9]{10}', total) if _likely_code(x)]
+        codes = [x.strip() for x in re.findall(r'\s[a-zA-Z0-9]{10}', total) if _likely_code(x)]
         if len(codes) <= 10:
             client = self.context.get('client')
             if not client:
@@ -93,7 +93,7 @@ class Photo(TelegramModule):
                 if self.context['client'].kill(code):
                     self.respond(f'Entered killcode {code}!')
                 if self.context['client'].puzzle(code):
-                    self.respond (f'Entered puzzlecode {code}!')
+                    self.respond(f'Entered puzzlecode {code}!')
 
         if len(results) > 5:
             option = self.ask_option(['Ja', 'Nee'], f'Er zijn {len(results)} resultaten, zal ik toch sturen?')
