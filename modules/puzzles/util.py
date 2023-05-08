@@ -44,6 +44,14 @@ def building_by_number(number):
 
 
 @lru_cache()
+def building_by_abbreviation(abbreviation):
+    results = [building for building in buildings() if building.abbreviation.lower() == abbreviation.lower()]
+    if not results:
+        return None
+    return results[0]
+
+
+@lru_cache()
 def location_by_length(length, ls=locations()):
     return [l for l in ls if len(l.name) == int(length)]
 
