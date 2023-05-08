@@ -89,6 +89,21 @@ class Puzzles(TelegramModule):
             self.respond('Verkeerde input. Ik verwacht bijvoorbeeld \'/ascii 84,101,115,116\'.')
 
     @command
+    def alphabet(self, items):
+        """
+        Vertaalt de alphabetindices naar alphabetletters, of de alphabetletters naar alphabetindices. De inputwaarden dienen gescheiden te worden met komma's.
+        """
+        item_list = items.split(',')
+        if all([n.isalpha() for n in item_list]):
+            result = util.characters_to_character_indices(item_list)
+            self.respond(items + ': ' + result)
+        elif all([n.isdigit() and 1 <= int(n) <= 26 for n in item_list]):
+            result = util.character_indices_to_characters(item_list)
+            self.respond(items + ': ' + result)
+        else:
+            self.respond('Verkeerde input. Ik verwacht òf alphabetindices, òf alphabetletters, gescheiden met komma\'s')
+
+    @command
     def base(self, numbers, base_x, base_y):
         """
         Converteert de waarden van de ene base naar de andere base. Er kunnen meerdere waarden tegelijk omgezet worden door deze te scheiden met komma's.
