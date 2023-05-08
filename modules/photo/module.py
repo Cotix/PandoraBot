@@ -2,6 +2,7 @@ import io
 import pytesseract
 import cv2
 import numpy as np
+import re
 from PIL import Image
 from pytesseract import TesseractError
 
@@ -67,9 +68,23 @@ class Photo(TelegramModule):
             except TesseractError:
                 pass
 
+        results = [r for r in results if r and len(r) > 1]
+        total = ' ' + ' '.join(results) + ' '
+        codes = re.findall(r'\s[a-zA-Z0-9]{10}', total)
+        if len(codes) <= 10:
+            client = self.context.get('client')
+            if not client:
+                self.respond(f'No login found, logging in with backup credentials!')
+                self.context['client'] = IAPandoraClient()
+                self.context['client'].login(os.getenv('default_login'), os.getenv('default_password'))
+            for code in codes:
+                if self.context['client'].kill(code):
+                    self.respond(f'Entered killcode {code}!')
+                if self.context['client'].puzzle(code):
+                    self.respond (f'Entered puzzlecode {code}!')
+
         if len(results) > 5:
-            option = self.ask_option(['Ja', 'Nee'],
-                            f'Er zijn {len(results)} resultaten, zal ik toch sturen?')
+            option = self.ask_option(['Ja', 'Nee'], f'Er zijn {len(results)} resultaten, zal ik toch sturen?')
             if option == 'Ja':
                 for r in results:
                     self.respond(r)
