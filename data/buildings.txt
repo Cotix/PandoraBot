@@ -51,6 +51,7 @@ Nr	Dutch Name	Afkorting	Literal Translation	Explanation
 60	Vlinder	VI	Butterfly
 47	Vrijhof	VR	Leisure Courtyard
 12	Waaier	WA	Handheld Folding Fan
+55  Waterlab ??
 22	Westhorst	WH	Horst West
 31	Windpark	WP	Wind Farm
 11	Zilverling	ZI	Silver Coin
