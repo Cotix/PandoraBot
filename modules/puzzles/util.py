@@ -140,7 +140,7 @@ Transforms given characters to their index in the alphabet.
 Character indices are 1-based, ie. A=1, B=2 etc.
 '''
 def characters_to_character_indices(characters):
-    return [ord(character) - ord('a') + 1 for character in characters]
+    return [ord(character.lower()) - ord('a') + 1 for character in characters]
 
 
 @lru_cache()
