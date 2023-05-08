@@ -24,15 +24,15 @@ class IAPandoraClient:
         return self.session.get('%s%s' % (self.url, path))
 
     def is_logged_in(self):
-        return self._get('profile/').status_code == 200
+        return self._get('accounts/profile/').status_code == 200
 
     def login(self, username, password):
         logging.log(logging.INFO, 'Logging in as %s' % username)
         self.username = username
         self.password = password
-        csrf = self._get_csrf('auth/login')
-        result = self._post('api/auth/login', {
-            'csrfmiddlewaretoken': csrf, 'username': username, 'password': password
+        csrf = self._get_csrf('accounts/login')
+        result = self._post('accounts/login', {
+            'csrfmiddlewaretoken': csrf, 'login': username, 'password': password
         })
 
         if result.status_code != 200:
@@ -45,14 +45,18 @@ class IAPandoraClient:
                     (code, self.username))
         if not self.is_logged_in():
             self.login(self.username, self.password)
-        # todo: implement kill logic
-        return False
+        csrf = self._get_csrf('kills/add')
+        result = self._post('kills/add', {'kill_code': str(code), 'csrfmiddlewaretoken': csrf})
+
+        return result.status_code == 200
 
     def puzzle(self, code):
         logging.log(logging.INFO, 'Submitting puzzlecode %s on account %s' %
                     (code, self.username))
         if not self.is_logged_in():
             self.login(self.username, self.password)
-        # todo: implement puzzle logic
-        return False
+
+        csrf = self._get_csrf('solves/add')
+        result = self._post('solves/add', {'puzzle_code': str(code), 'csrfmiddlewaretoken': csrf})
+        return result.status_code == 200
 
