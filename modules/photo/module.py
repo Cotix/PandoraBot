@@ -3,6 +3,7 @@ import pytesseract
 import cv2
 import numpy as np
 import re
+import string
 from PIL import Image
 from pytesseract import TesseractError
 
@@ -14,6 +15,17 @@ def get_new(old):
     cv2.bitwise_not(new,new)
     return new
 
+
+def _likely_code(x):
+    lower_count, upper_count, number_count = 0, 0, 0
+    for c in string.ascii_lowercase:
+        lower_count += x.count(c)
+    for c in string.ascii_uppercase:
+        upper_count += x.count(c)
+    for c in string.digits:
+        number_count += x.count(c)
+
+    return lower_count >= 2 and upper_count >= 2 and number_count >= 1
 
 class Photo(TelegramModule):
     @photo
@@ -70,7 +82,7 @@ class Photo(TelegramModule):
 
         results = [r for r in results if r and len(r) > 1]
         total = ' ' + ' '.join(results) + ' '
-        codes = re.findall(r'\s[a-zA-Z0-9]{10}', total)
+        codes = [x for x in re.findall(r'\s[a-zA-Z0-9]{10}', total) if _likely_code(x)]
         if len(codes) <= 10:
             client = self.context.get('client')
             if not client:
