@@ -6,16 +6,23 @@ from . import util
 class Puzzles(TelegramModule):
 
     @command
-    def building(self, number):
+    def building(self, item):
         """
-        Geeft de gebouwnaam bij een gebouwnummer.
+        Geeft de gebouwnaam bij een gebouwnummer of gebouwafkorting.
         """
-        building = util.building_by_number(number)
+        if (item.isdigit()):
+            building = util.building_by_number(item)
+            if not building:
+                self.respond('Dat gebouwnummer bestaat niet!')
+            self.respond('Gebouwnummer %s komt overeen met gebouw %s.' % (item, building.name))
+        elif (len(item) == 2):
+            building = util.building_by_abbreviation(item)
+            if not building:
+                self.respond('Deze gebouwafkorting bestaat niet!')
+            self.respond('Gebouwafkorting %s komt overeen met gebouw %s.' % (item, building.abbreviation))
+        else:
+            self.respond('Verkeerde input. Ik verwacht bijvoorbeeld \'12\' of \'GY\'')
 
-        if not building:
-            self.respond('Dat gebouwnummer bestaat niet!')
-
-        self.respond('Gebouwnummer %s komt overeen met gebouw %s.' % (number, building.name))
 
     @command
     def locations(self, length):
