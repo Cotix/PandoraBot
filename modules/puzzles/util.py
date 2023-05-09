@@ -133,6 +133,24 @@ def numbers_to_ascii_characters(numbers):
     return ''.join([chr(int(x)) for x in numbers])
 
 
+'''
+Transforms given alphabet indices to characters.
+
+Character indices are 1-based, ie. 1=A, 2=B etc.
+'''
+def character_indices_to_characters(indices):
+    return [chr(ord('a') + index - 1) for index in indices]
+
+
+'''
+Transforms given characters to their index in the alphabet.
+
+Character indices are 1-based, ie. A=1, B=2 etc.
+'''
+def characters_to_character_indices(characters):
+    return [ord(character.lower()) - ord('a') + 1 for character in characters]
+
+
 @lru_cache()
 def base_x_to_base_y(x, original_base, new_base):
     return base_10_to_base_b(base_b_to_base_10(x, original_base), new_base)
@@ -147,7 +165,6 @@ def base_b_to_base_10(x, b):
 def base_10_to_base_b(x, b):
     if x == 0:
         return '0'
-    result = ''
     current_x = x
     results = []
     while current_x:
